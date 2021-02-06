@@ -3,7 +3,6 @@ from flask import Flask
 from flask import render_template
 from flask import request
 from flask import redirect
-from IPValidation import Solution
 from flask_sqlalchemy import SQLAlchemy
 from flask_toastr import Toastr
 from flask import flash

@@ -1,6 +1,6 @@
-from IPValidation import Solution
+from ValidationFunctions import ValidationFunctions
 
-ob1 = Solution()
+ob1 = ValidationFunctions()
 
 
 class Validation(object):

@@ -1,7 +1,7 @@
 import re
 
 
-class Solution(object):
+class ValidationFunctions(object):
     def validIPAddress(self, IP, IPType):
         """
       :type IP: str
