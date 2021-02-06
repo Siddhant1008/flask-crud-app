@@ -1,4 +1,9 @@
 <html>
+<head>
+{{ toastr.include_jquery() }}
+    {{ toastr.include_toastr_css() }}
+    {{ toastr.message() }}
+</head>
   <body>
 
 
@@ -36,6 +41,6 @@
       <input type="text" name="AttValue">
       <input type="submit" value="Add">
     </form>
-
+ {{ toastr.include_toastr_js() }}
   </body>
 </html>

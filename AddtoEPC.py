@@ -18,15 +18,14 @@ for i in list1:
             cleanList.append(i)
 
 
-db.drop_all()
-db.create_all()
+
 
 #print(cleanList)
 for i in cleanList:
 
     epcObj = None
     try:
-        print(i[0], i[1])
+        #print(i[0], i[1])
         epcObj = EPC(AttName=str(i[0]), AttValue=str(i[1]))
         db.session.add(epcObj)
 

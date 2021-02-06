@@ -5,14 +5,19 @@ from flask import request
 from flask import redirect
 from IPValidation import Solution
 from flask_sqlalchemy import SQLAlchemy
+from flask_toastr import Toastr
+from flask import flash
+
+
 
 project_dir = os.path.dirname(os.path.abspath(__file__))
 database_file = "sqlite:///{}".format(os.path.join(project_dir, "attribute_database.db"))
 
 app = Flask(__name__)
+toastr = Toastr(app)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = database_file
-
+app.secret_key = 'super secret key'
 db = SQLAlchemy(app)
 
 class EPC(db.Model):
@@ -21,11 +26,20 @@ class EPC(db.Model):
     AttValue = db.Column(db.String(80),nullable=True)
 
     def __repr__(self):
-        return "<Title: {},Value:{}>".format(self.AttName,self.AttValue)
+        return "<AttName: {},AttValue:{}>".format(self.AttName,self.AttValue)
+
+class EPCTypes(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    AttName = db.Column(db.String(80), nullable=False)
+    AttType = db.Column(db.String(80), nullable=True)
+
+    def __repr__(self):
+        return "<Title: {},Value:{}>".format(self.AttName, self.AttType)
 
 
 @app.route('/', methods=["GET", "POST"])
 def home():
+
     epc = None
     if request.form:
         try:
@@ -45,6 +59,7 @@ def update():
         oldAttValue = request.form.get("oldAttValue")
         newAttValue = request.form.get("newAttValue")
         AttName = request.form.get("AttName")
+
         ob = Solution()
 
 
@@ -53,7 +68,8 @@ def update():
             epc.AttValue = newAttValue
             db.session.commit()
         else:
-            print("Invalid IP")
+            flash("Invalid IP", 'error')
+
 
     except Exception as e:
         print("Couldn't update Attribute")
