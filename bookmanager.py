@@ -7,6 +7,7 @@ from IPValidation import Solution
 from flask_sqlalchemy import SQLAlchemy
 from flask_toastr import Toastr
 from flask import flash
+from switch import Validation
 
 
 
@@ -41,6 +42,7 @@ class EPCTypes(db.Model):
 def home():
 
     epc = None
+    epcTypeObj = None
     if request.form:
         try:
             epc = EPC(AttName=request.form.get("AttName"),AttValue=request.form.get("AttValue"))
@@ -54,21 +56,31 @@ def home():
     return render_template("home.html", epcs=epcs)
 
 @app.route("/update", methods=["POST"])
+
 def update():
+
     try:
         oldAttValue = request.form.get("oldAttValue")
         newAttValue = request.form.get("newAttValue")
         AttName = request.form.get("AttName")
+        epcTypeObj = EPCTypes.query.filter_by(AttName=AttName).first()
+        print('Attribute_type', epcTypeObj.AttType)
 
-        ob = Solution()
+        #call validation
+        ob = Validation()
 
 
-        if ob.validIPAddress(newAttValue,"IPv4"):
+        if ob.f(newAttValue,epcTypeObj.AttType):
+            print("successful switch")
             epc = EPC.query.filter_by(AttValue=oldAttValue,AttName=AttName).first()
             epc.AttValue = newAttValue
             db.session.commit()
+            flash(epcTypeObj.AttType + ' Updated', 'success')
         else:
             flash("Invalid IP", 'error')
+
+
+
 
 
     except Exception as e:

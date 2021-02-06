@@ -1,6 +1,6 @@
 from bookmanager import EPCTypes, db
 
-file2 = open('lte_epc.cfg', 'r', encoding="utf8")
+file2 = open('EPCAttributesTypes.txt', 'r', encoding="utf8")
 AttTypesLines = file2.readlines()
 list1 = []
 AttTypesList = []
@@ -18,6 +18,8 @@ for i in list1:
 
 for i in AttTypesList:
 
+
+
     epctypesObj = None
     try:
         epctypesObj = EPCTypes(AttName=str(i[0]), AttType=str(i[1]))
@@ -27,6 +29,5 @@ for i in AttTypesList:
         print(e)
 
 db.session.commit()
-
 
 
