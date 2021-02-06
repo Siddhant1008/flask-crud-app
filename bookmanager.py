@@ -3,8 +3,9 @@ from flask import Flask
 from flask import render_template
 from flask import request
 from flask import redirect
-
+from IPValidation import Solution
 from flask_sqlalchemy import SQLAlchemy
+
 project_dir = os.path.dirname(os.path.abspath(__file__))
 database_file = "sqlite:///{}".format(os.path.join(project_dir, "attribute_database.db"))
 
@@ -44,12 +45,16 @@ def update():
         oldAttValue = request.form.get("oldAttValue")
         newAttValue = request.form.get("newAttValue")
         AttName = request.form.get("AttName")
+        ob = Solution()
 
 
+        if ob.validIPAddress(newAttValue,"IPv4"):
+            epc = EPC.query.filter_by(AttValue=oldAttValue,AttName=AttName).first()
+            epc.AttValue = newAttValue
+            db.session.commit()
+        else:
+            print("Invalid IP")
 
-        epc = EPC.query.filter_by(AttValue=oldAttValue,AttName=AttName).first()
-        epc.AttValue = newAttValue
-        db.session.commit()
     except Exception as e:
         print("Couldn't update Attribute")
         print(e)
